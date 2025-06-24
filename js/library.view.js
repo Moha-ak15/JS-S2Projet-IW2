@@ -1,5 +1,3 @@
-// ✅ view.js
-
 import { changementStatut, detailsLivre } from "./library.controller.js";
 
 const zones = {
@@ -14,12 +12,41 @@ export function afficherTousLesLivres(livres) {
   livres.forEach((livre) => {
     const carte = creerCarteLivre(livre);
     zones[livre.statut].appendChild(carte);
+    activerDragAndDrop();
+  });
+}
+
+function activerDragAndDrop() {
+  Object.entries(zones).forEach(([statut, zone]) => {
+    zone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      zone.classList.add("drag-hover");
+    });
+
+    zone.addEventListener("dragleave", () => {
+      zone.classList.remove("drag-hover");
+    });
+
+    zone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      zone.classList.remove("drag-hover");
+
+      const id = e.dataTransfer.getData("text/plain");
+      changementStatut(id, statut);
+    });
   });
 }
 
 function creerCarteLivre(livre) {
   const carte = document.createElement("div");
   carte.className = "card mb-3";
+  carte.draggable = true;
+  carte.dataset.id = livre.id;
+
+  // Drag start event
+  carte.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/plain", livre.id);
+  });
 
   const body = document.createElement("div");
   body.className = "card-body";
@@ -64,12 +91,15 @@ function creerCarteLivre(livre) {
     }
   });
 
-  const btnSuivant = document.createElement("button");
-  btnSuivant.className = "btn btn-sm btn-outline-success";
-  btnSuivant.innerText = "→";
-  btnSuivant.addEventListener("click", () => {
-    const prochain = prochainStatut(livre.statut);
-    changementStatut(livre.id, prochain);
+  carte.draggable = true;
+
+  carte.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/plain", livre.id);
+    carte.classList.add("dragging");
+  });
+
+  carte.addEventListener("dragend", () => {
+    carte.classList.remove("dragging");
   });
 
   body.appendChild(titre);
@@ -77,17 +107,8 @@ function creerCarteLivre(livre) {
   body.appendChild(btnDetail);
   body.appendChild(btnEdit);
   body.appendChild(btnSupprimer);
-  if (livre.statut !== "termines") body.appendChild(btnSuivant);
-
   carte.appendChild(body);
   return carte;
-}
-
-
-function prochainStatut(statut) {
-  if (statut === "a-lire") return "en-cours";
-  if (statut === "en-cours") return "termines";
-  return "termines";
 }
 
 export function afficherModalLivre(livre) {
