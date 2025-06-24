@@ -9,7 +9,8 @@ import {
   supprimerLivre,
 } from "./library.model.js";
 
-import { afficherTousLesLivres, afficherModalLivre } from "./library.view.js";
+
+import { afficherTousLesLivres, afficherModalLivre, afficherToaster } from "./library.view.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   chargerDepuisLocalStorage();
@@ -33,6 +34,8 @@ export function changementStatut(id, nouveauStatut) {
   changerStatut(id, nouveauStatut);
   sauvegarderDansLocalStorage();
   afficherTousLesLivres(getLivres());
+
+  afficherToaster("Livre déplacé vers : " + nouveauStatut, "success");
 }
 
 export function detailsLivre(id) {
