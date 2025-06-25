@@ -1,43 +1,6 @@
-import { changementStatut, detailsLivre } from "./library.controller.js";
+import { detailsLivre } from "../Controller/library.controller.js";
 
-const zones = {
-  "a-lire": document.getElementById("a-lire"),
-  "en-cours": document.getElementById("en-cours"),
-  "termines": document.getElementById("termines")
-}
-
-
-export function afficherTousLesLivres(livres) {
-  Object.values(zones).forEach((zone) => (zone.innerHTML = ""));
-  livres.forEach((livre) => {
-    const carte = creerCarteLivre(livre);
-    zones[livre.statut].appendChild(carte);
-    activerDragAndDrop();
-  });
-}
-
-function activerDragAndDrop() {
-  Object.entries(zones).forEach(([statut, zone]) => {
-    zone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      zone.classList.add("drag-hover");
-    });
-
-    zone.addEventListener("dragleave", () => {
-      zone.classList.remove("drag-hover");
-    });
-
-    zone.addEventListener("drop", (e) => {
-      e.preventDefault();
-      zone.classList.remove("drag-hover");
-
-      const id = e.dataTransfer.getData("text/plain");
-      changementStatut(id, statut);
-    });
-  });
-}
-
-function creerCarteLivre(livre) {
+export function creerCarteLivre(livre) {
   const carte = document.createElement("div");
   carte.className = "card mb-3";
   carte.draggable = true;
@@ -109,31 +72,4 @@ function creerCarteLivre(livre) {
   body.appendChild(btnSupprimer);
   carte.appendChild(body);
   return carte;
-}
-
-export function afficherModalLivre(livre) {
-  const zone = document.getElementById("contenu-modal");
-  zone.innerHTML = `
-    <h5>${livre.titre}</h5>
-    <p><strong>Auteur :</strong> ${livre.auteur}</p>
-    <p><strong>Statut :</strong> ${livre.statut}</p>
-    <p><strong>Note :</strong> ${livre.note || "–"}</p>
-    <p><strong>Commentaire :</strong> ${livre.commentaire || "–"}</p>
-  `;
-  const modal = new bootstrap.Modal(document.getElementById("modalDetails"));
-  modal.show();
-}
-
-export function afficherToaster(message, couleur = "success") {
-  const toast = document.createElement("div");
-  toast.className = `toast align-items-center text-bg-${couleur}  show position-fixed bottom-0 end-0 m-3`;
-  toast.role = "alert";
-  toast.innerHTML = `
-    <div class="d-flex">
-      <div class="toast-body">${message}</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-    </div>
-  `;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
 }

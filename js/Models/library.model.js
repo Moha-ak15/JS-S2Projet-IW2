@@ -1,29 +1,16 @@
-let livres = [
-  {
+let livres = [];
+
+export async function chargerDataJSON() {
+  const response = await fetch("./data/data.json");
+  if (!response.ok) {
+    throw new Error("Erreur du chargement des livres.");
+  }
+  const data = await response.json();
+  livres = data.map((livre) => ({
     id: crypto.randomUUID(),
-    titre: "Le Seigneur des Anneaux",
-    auteur: "J.R.R. Tolkien",
-    statut: "a-lire",
-    note: "",
-    commentaire: "",
-  },
-  {
-    id: crypto.randomUUID(),
-    titre: "1984",
-    auteur: "George Orwell",
-    statut: "en-cours",
-    note: "",
-    commentaire: "",
-  },
-  {
-    id: crypto.randomUUID(),
-    titre: "L'Alchimiste",
-    auteur: "Paulo Coelho",
-    statut: "termines",
-    note: "5",
-    commentaire: "Très inspirant.",
-  },
-];
+    ...livre,
+  }));
+}
 
 export function getLivres() {
   return livres;

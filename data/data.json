@@ -1,0 +1,23 @@
+[
+  {
+    "titre": "Le Seigneur des Anneaux",
+    "auteur": "J.R.R. Tolkien",
+    "statut": "a-lire",
+    "note": "",
+    "commentaire": ""
+  },
+  {
+    "titre": "1984",
+    "auteur": "George Orwell",
+    "statut": "en-cours",
+    "note": "",
+    "commentaire": ""
+  },
+  {
+    "titre": "L'Alchimiste",
+    "auteur": "Paulo Coelho",
+    "statut": "termines",
+    "note": "5",
+    "commentaire": "Très inspirant."
+  }
+]

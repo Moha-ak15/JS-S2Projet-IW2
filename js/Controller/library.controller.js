@@ -7,12 +7,17 @@ import {
   chargerDepuisLocalStorage,
   modifierLivre,
   supprimerLivre,
-} from "./library.model.js";
+  chargerDataJSON,
+} from "../Models/library.model.js";
 
+import { afficherLoader, cacherLoader } from "../Views/loader.view.js";
 
-import { afficherTousLesLivres, afficherModalLivre, afficherToaster } from "./library.view.js";
+import { afficherModalLivre } from "../Views/modal.view.js";
+import { afficherTousLesLivres } from "../Views/column.view.js";
+import { afficherToaster } from "../Views/toaster.view.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await chargerDataJSON();
   chargerDepuisLocalStorage();
   afficherTousLesLivres(getLivres());
 
@@ -54,3 +59,5 @@ function suppressionLivre(id) {
   sauvegarderDansLocalStorage();
   afficherTousLesLivres(getLivres());
 }
+
+document.getElementById("loader").style.display = "none";
